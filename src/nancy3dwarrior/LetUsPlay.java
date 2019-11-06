@@ -72,6 +72,8 @@ public class LetUsPlay {
         }
         // -------------------------------------- PLAYER CREATION END ---------------------------------------------------
 
+        
+        
         // -------------------------------------- GAME START ------------------------------------------------------------
         firstPlayer = random.nextInt(players.length); //Choose the starting player
         System.out.println("\nThe game has started " + players[firstPlayer].getName() + " goes first\n"
@@ -112,6 +114,7 @@ public class LetUsPlay {
                             System.out.println("\t!!! Sorry you need to stay where you are - that throw takes you off the grid and\n"
                                     + "\t\tyou lose 2 units of energy");
                             currentPlayer.addEnergy(-2);
+                            continue;
                         }
                         //In Bound Case
                         else {
@@ -163,13 +166,16 @@ public class LetUsPlay {
                             currentPlayer.addEnergy(-2); //Energy lost from forfeit
                         }
                     }
+                    System.out.println("\tYour energy is adjusted by " + board.getEnergyAdj(currentPlayer) + " for landing at (" + currentPlayer.getX() + ", " + currentPlayer.getY() + ") at level " + currentPlayer.getLevel());
+                    currentPlayer.addEnergy(board.getEnergyAdj(currentPlayer));
                 }
-                System.out.println("\tYour energy is adjusted by " + board.getEnergyAdj(currentPlayer) + " for landing at (" + currentPlayer.getX() + ", " + currentPlayer.getY() + ") at level " + currentPlayer.getLevel());
-                currentPlayer.addEnergy(board.getEnergyAdj(currentPlayer));
             }
+            
             System.out.println("\nAt the end of this round:");
-            for(Player p: players){
-                System.out.println("\t" + p);
+            //Using the same loop to preserve the order of players apparition 
+            for (int turn = 0; turn < players.length; turn++) {
+                int playerTurn = (firstPlayer + turn) % players.length; //Turns are cyclical mod the number of players
+                System.out.println("\t" + players[playerTurn]);
             }
             if(players[0].won(board) || players[1].won(board))
                 break;
