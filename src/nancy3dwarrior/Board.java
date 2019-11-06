@@ -2,10 +2,12 @@ package nancy3dwarrior;
 
 public class Board {
     public static final int MIN_LEVEL = 3;
+    public static final int MAX_LEVEL = 10;
     public static final int MIN_SIZE = 3;
+    public static final int MAX_SIZE = 10;
     private int[][][] board;
-    private int level;
-    private int size;
+    private final int level;
+    private final int size;
     
     public Board(){
         level = 3;
@@ -31,6 +33,10 @@ public class Board {
         return board[l][x][y];
     }
     
+    public int getEnergyAdj(Player p) {
+        return board[p.getLevel()][p.getX()][p.getY()];
+    }
+    
     private void createBoard() {
         board = new int[level][size][size];
         for(int l = 0; l < board.length; l++) {
@@ -50,6 +56,24 @@ public class Board {
                 }
             }
         }
+    }
+    
+    public int[] potentialLocation(Player p, int move) {
+        int lxy[] = new int[3]; //Stores the level, x, y of the potential location after a move
+        lxy[2] = (p.getY() + move); // Calculating and Storing potential y without mod
+        lxy[1] = (p.getX() + lxy[2]/size); // Calculating and Storing potential x without mod
+        lxy[0] = (p.getLevel() + lxy[1]/size); // Calculating and Storing potential level
+        lxy[2] %= size; // Adjusting mode size
+        lxy[1] %= size; // Adjusting mode size
+        return lxy;
+    }
+    
+    public Player occupiedBy(int l, int x, int y, Player[] players){ //Return location of the player occupying lxy position
+        for(Player player: players){
+            if(player.getLevel() == l && player.getX() == x && player.getY() == y)
+                return player;
+        }
+        return null;
     }
     
     @Override
