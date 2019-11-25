@@ -76,7 +76,7 @@ public class LetUsPlay {
         
         // -------------------------------------- GAME START ------------------------------------------------------------
         firstPlayer = random.nextInt(players.length); //Choose the starting player
-        System.out.println("\nThe game has started " + players[firstPlayer].getName() + " goes first\n"
+        System.out.println("\nThe game has started, " + players[firstPlayer].getName() + " goes first\n"
                 + "================================\n");
 
         while (true) {
@@ -95,7 +95,8 @@ public class LetUsPlay {
                             currentPlayer.addEnergy(Player.DOUBLE_ENERGY);
                         }
                     }
-                } // Player has more than 0 energy case
+                }
+                // Player has more than 0 energy case
                 else {
                     int rollValue = dice.rollDice();
                     System.out.println("\t" + currentPlayer.getName() + " you just rolled " + dice);
@@ -105,8 +106,18 @@ public class LetUsPlay {
                         System.out.println("\tCongratulations you rolled double " + dice.getDie1() + ". Your energy went up by " + Player.DOUBLE_ENERGY + " units");
                         currentPlayer.addEnergy(Player.DOUBLE_ENERGY);
                     }
-
-                    int[] potentialLocation = board.potentialLocation(currentPlayer, rollValue);
+                    int[] potentialLocation;
+                    
+                    //Checking if the player is at the second to last square
+                    if(currentPlayer.getLevel() != board.getLevel()-1 || currentPlayer.getX() != board.getSize()-1 || currentPlayer.getY() != board.getSize()-2) {
+                        potentialLocation = board.potentialLocation(currentPlayer, rollValue);
+                    }
+                    // Player at second to last square of the top level case
+                    else {
+                        System.out.println("\tYou are at the second to last square. Moving backwards");
+                        potentialLocation = board.potentialLocation(currentPlayer, -rollValue); //Move backwards
+                    }
+                    
                     Player playerOnLocation = board.occupiedBy(potentialLocation[0], potentialLocation[1], potentialLocation[2], players);
                     if (playerOnLocation == null) {
                         //Out of Bound Case

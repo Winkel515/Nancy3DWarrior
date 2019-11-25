@@ -61,10 +61,14 @@ public class Board {
     public int[] potentialLocation(Player p, int move) {
         int lxy[] = new int[3]; //Stores the level, x, y of the potential location after a move
         lxy[2] = (p.getY() + move); // Calculating and Storing potential y without mod
-        lxy[1] = (p.getX() + lxy[2]/size); // Calculating and Storing potential x without mod
-        lxy[0] = (p.getLevel() + lxy[1]/size); // Calculating and Storing potential level
+        lxy[1] = (int)(p.getX() + Math.floor(lxy[2]*1.0/size)); // Calculating and Storing potential x without mod
+        lxy[0] = (int)(p.getLevel() + Math.floor(lxy[1]*1.0/size)); // Calculating and Storing potential level
         lxy[2] %= size; // Adjusting mode size
         lxy[1] %= size; // Adjusting mode size
+        if(lxy[2] < 0)
+            lxy[2] += size;
+        if(lxy[1] < 0)
+            lxy[1] += size;
         return lxy;
     }
     
